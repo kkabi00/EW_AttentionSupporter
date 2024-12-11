@@ -1,43 +1,56 @@
-import time
+from flask import Flask, request, render_template
+import pandas as pd
+import random
 import os
 
-# 파일 경로 설정
-data_files = {
-    3: ["life_3_1.txt", "life_3_2.txt"],
-    2: ["life_2_1.txt", "life_2_2.txt"],
-    1: ["life_1_1.txt", "life_1_2.txt"],
-}
+app = Flask(__name__)
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# 화면 지우기 함수
-def clear_console():
-    os.system('cls' if os.name == 'nt' else 'clear')
+def evaluate_concentration(csv_file):
+    df = pd.read_csv(csv_file)
+    fail_count = 0
+    window_size = 8
 
-# 도트 그래픽 출력 함수
-def display_life(life):
-    files = data_files.get(life, [])
-    if not files:
-        print("잘못된 생명 수!")
-        return
+    for i in range(len(df) - window_size + 1):
+        window = df['Attention Value'].iloc[i:i+window_size]
+        if (window <= 50).sum() >= 3:
+            fail_count += 1
 
-    for _ in range(3):
-        for file_path in files:
-            clear_console()
-            try:
-                with open(file_path, 'r', encoding='utf-8') as file:
-                    print(file.read())
-                time.sleep(1)
-            except Exception as e:
-                print(f"파일 읽기 오류: {e}")
+    if fail_count > 0:
+        return "fail"
+    elif (df['Attention Value'] > 50).all():
+        return "pass"
+    else:
+        return "undecided"
 
-# 게임 실행 함수
-def main():
-    print("게임 시작! 🧠")
-    time.sleep(2)
+def generate_quiz(text_content):
+    content = text_content.splitlines()
+    questions = random.sample(content, min(5, len(content)))
+    return questions
 
-    for life in range(3, 0, -1):
-        display_life(life)
-        print(f"현재 생명: {life}개 남음!\n")
-        time.sleep(1)
+@app.route('/', methods=['GET', 'POST'])
+def upload_files():
+    if request.method == 'POST':
+        csv_file = request.files.get('csv_file')
+        text_content = request.form.get('text_content')
 
-if __name__ == "__main__":
-    main()
+        if csv_file and text_content.strip():
+            csv_path = os.path.join(app.config['UPLOAD_FOLDER'], csv_file.filename)
+            csv_file.save(csv_path)
+
+            result = evaluate_concentration(csv_path)
+
+            if result == "fail":
+                quiz_questions = generate_quiz(text_content)
+                return render_template('quiz.html', questions=quiz_questions)
+            elif result == "pass":
+                return "굉장한 집중력이에요!"
+            else:
+                return "집중도 평가를 진행할 수 없습니다."
+
+    return render_template('upload.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)

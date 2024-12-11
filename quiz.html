@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>퀴즈</title>
+</head>
+<body>
+    <h1>집중 퀴즈</h1>
+    <p>아래 질문에 답변하세요:</p>
+    <ol>
+        {% for question in questions %}
+            <li>{{ question }}</li>
+        {% endfor %}
+    </ol>
+    <a href="/">다시 업로드하기</a>
+</body>
+</html>
