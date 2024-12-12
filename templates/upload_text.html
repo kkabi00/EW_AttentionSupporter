@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>텍스트 입력</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #673AB7;
+        }
+        form {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+        input[type="submit"] {
+            background-color: #673AB7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        input[type="submit"]:hover {
+            background-color: #5e35b1;
+        }
+    </style>
+</head>
+<body>
+    <h1>텍스트 입력</h1>
+    <form action="/" method="post">
+        <label for="text-content">공부 내용을 입력하세요:</label><br>
+        <textarea name="text_content" id="text-content" placeholder="공부 내용을 입력하세요" required></textarea><br>
+        <input type="submit" value="다음">
+    </form>
+</body>
+</html>

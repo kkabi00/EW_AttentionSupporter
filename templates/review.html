@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결과 검토</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #FF5722;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #FFE0B2;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            background-color: #FF5722;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #e64a19;
+        }
+    </style>
+</head>
+<body>
+    <h1>결과 검토</h1>
+    <h2>CSV 그래프</h2>
+    <img src="data:image/png;base64,{{ plot_url }}" alt="CSV 그래프"><br>
+    <h2>집중도 저하 구간</h2>
+    <ul>
+        {% for start, end in low_intervals %}
+            <li>{{ start }} ~ {{ end }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/">다시 시작하기</a>
+</body>
+</html>
